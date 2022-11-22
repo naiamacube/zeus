@@ -8,16 +8,17 @@ jobs:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
     resource_class: medium
+    environment:
+      TF_gcp_credentials = "$gcp_credentials"
+      TF_gcp_region = "$gcp_region"
+      TF_gcp_zone = "$gcp_zone"
     steps:
       - checkout
       - run:
           command: |
-            echo 'aws_region = "$aws_region"' >> config.aws.backend
-            echo 'aws_access_key_id = "$aws_access_key"' >> config.aws.backend
-            echo 'aws_secret_access_key = "$aws_secret_key"' >> config.aws.backend
-            echo 'gcp_credentials = "$gcp_credentials"' >> secret.tfvars
-            echo 'gcp_region = "$gcp_region"' >> secret.tfvars
-            echo 'gcp_zone = "$gcp_zone"' >> secret.tfvars
+            echo "aws_region = \"$aws_region\"" >> config.aws.backend
+            echo "aws_access_key_id = \"$aws_access_key\"" >> config.aws.backend
+            echo "aws_secret_access_key = \"$aws_secret_key\"" >> config.aws.backend
       - run:
           command: |
             terraform init -reconfigure -backend-config=config.aws.backend
@@ -29,10 +30,10 @@ jobs:
             terraform validate
       - run:
           command: |
-            terraform plan -backend-config=config.aws.backend -var-file=secret.tfvars
+            terraform plan -backend-config=config.aws.backend
       - run:
           command: |
-            terraform apply -backend-config=config.aws.backend -var-file=secret.tfvars
+            terraform apply -backend-config=config.aws.backend
 
 workflows:
   deploy:
