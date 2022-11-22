@@ -31,7 +31,7 @@ resource "google_container_node_pool" "main" {
     disk_type    = "pd-standard"
     disk_size_gb = 10
 
-    service_account = google_service_account.master.email
+    service_account = data.google_service_account.master.email
     oauth_scopes    = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
