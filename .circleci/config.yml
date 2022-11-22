@@ -17,7 +17,7 @@ jobs:
             echo 'gcp_region = "$gcp_region"' >> secret.tfvars
             echo 'gcp_zone = "$gcp_zone"' >> secret.tfvars
             terraform init -reconfigure -backend-config=config.aws.backend
-      - terraform/fmt:
+      - terraform/fmt
       - terraform/validate:
           parameters: 
             - backend_config_file: config.aws.backend
