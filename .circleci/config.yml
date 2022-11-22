@@ -1,15 +1,15 @@
 version: '2.1'
 
-orbs:
-  terraform: circleci/terraform@3.2.0
-
 jobs:
-  single-job-lifecycle:
-    executor: terraform/default
+  deploy:
+    docker:
+      - image: naiama/longor:0.1.0
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    resource_class: medium
     steps:
       - checkout
-        # - terraform/install
-        # terraform_version: "1.2"
       - run:
           command: |
             echo 'aws_region = "$aws_region"' >> config.aws.backend
@@ -18,21 +18,26 @@ jobs:
             echo 'gcp_credentials = "$gcp_credentials"' >> secret.tfvars
             echo 'gcp_region = "$gcp_region"' >> secret.tfvars
             echo 'gcp_zone = "$gcp_zone"' >> secret.tfvars
-      - terraform/init:
-          backend_config_file: config.aws.backend
-      - terraform/fmt
-      - terraform/validate
-      - terraform/plan:
-          backend_config_file: config.aws.backend
-          var_file: secret.tfvars
-      - terraform/apply:
-          backend_config_file: config.aws.backend
-          var_file: secret.tfvars
+      - run:
+          command: |
+            terraform init -reconfigure -backend-config=config.aws.backend
+      - run:
+          command: |
+            terraform fmt
+      - run:
+          command: |
+            terraform validate
+      - run:
+          command: |
+            terraform plan -backend-config=config.aws.backend -var-file=secret.tfvars
+      - run:
+          command: |
+            terraform apply -backend-config=config.aws.backend -var-file=secret.tfvars
 
 workflows:
-  single-job-lifecycle:
+  deploy:
     jobs:
-      - single-job-lifecycle:
+      - deploy:
           context:
             - terraform
             - n3-zeus
