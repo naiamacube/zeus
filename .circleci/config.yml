@@ -19,25 +19,14 @@ jobs:
             terraform init -reconfigure -backend-config=config.aws.backend
       - terraform/fmt
       - terraform/validate:
-          requires:
-            - terraform/fmt
       - terraform/plan:
           parameters: 
             - backend_config_file: config.aws.backend
             - var_file: secret.tfvars
-          persist-workspace: true
-          requires:
-            - terraform/validate
       - terraform/apply:
           parameters: 
             - backend_config_file: config.aws.backend
             - var_file: secret.tfvars
-          attach-workspace: true
-          filters:
-            branches:
-              only: main
-          requires:
-            - terraform/plan
 
 workflows:
   single-job-lifecycle:
