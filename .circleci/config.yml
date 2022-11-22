@@ -8,7 +8,7 @@ jobs:
     executor: terraform/default
     steps:
       - checkout
-      - terraform/install:
+      - terraform/install
         # terraform_version: "1.2"
       - run:
           command: |
