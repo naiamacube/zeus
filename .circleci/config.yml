@@ -30,7 +30,7 @@ jobs:
             terraform validate
       - run:
           command: |
-            terraform plan -backend-config=config.aws.backend
+            terraform plan
       - run:
           command: |
             terraform apply -backend-config=config.aws.backend
