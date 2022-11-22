@@ -5,13 +5,13 @@ orbs:
 
 jobs:
   single-job-lifecycle:
-    executor: 
-      terraform/default:
-        resource_class: large
+    executor: terraform/default
     steps:
       - checkout
       - terraform/install:
-          terraform_version: "1.3.5"
+          arch: amd64
+          os: linux
+          terraform_version: 1.3.5
       - run:
           command: |
             echo 'aws_region = "$aws_region"' >> config.aws.backend
