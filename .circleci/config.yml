@@ -20,13 +20,11 @@ jobs:
       - terraform/fmt
       - terraform/validate
       - terraform/plan:
-          parameters: 
-            - backend_config_file: config.aws.backend
-            - var_file: secret.tfvars
+          backend_config_file: config.aws.backend
+          var_file: secret.tfvars
       - terraform/apply:
-          parameters: 
-            - backend_config_file: config.aws.backend
-            - var_file: secret.tfvars
+          backend_config_file: config.aws.backend
+          var_file: secret.tfvars
 
 workflows:
   single-job-lifecycle:
