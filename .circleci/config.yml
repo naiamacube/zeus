@@ -1,7 +1,7 @@
 version: '2.1'
 
 orbs:
-  terraform: circleci/terraform@3.2
+  terraform: circleci/terraform@3.2.0
 
 jobs:
   single-job-lifecycle:
@@ -55,3 +55,8 @@ jobs:
               only: main
           requires:
             - terraform/plan
+
+workflows:
+  single-job-lifecycle:
+    jobs:
+      - single-job-lifecycle
