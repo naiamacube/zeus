@@ -6,6 +6,9 @@ orbs:
 jobs:
   single-job-lifecycle:
     executor: terraform/default
+    context: 
+      - terraform
+      - n3-zeus
     steps:
       - checkout
       - run:
@@ -19,16 +22,10 @@ jobs:
             terraform init -reconfigure -backend-config=config.aws.backend
       - terraform/fmt:
           checkout: true
-          context: 
-            - terraform
-            - n3-zeus
       - terraform/validate:
           checkout: true
           parameters: 
             - backend_config_file: config.aws.backend
-          context: 
-            - terraform
-            - n3-zeus
           requires:
             - terraform/fmt
       - terraform/plan:
@@ -36,9 +33,6 @@ jobs:
           parameters: 
             - backend_config_file: config.aws.backend
             - var_file: secret.tfvars
-          context: 
-            - terraform
-            - n3-zeus
           persist-workspace: true
           requires:
             - terraform/validate
@@ -47,9 +41,6 @@ jobs:
             - backend_config_file: config.aws.backend
             - var_file: secret.tfvars
           attach-workspace: true
-          context: 
-            - terraform
-            - n3-zeus
           filters:
             branches:
               only: main
