@@ -9,9 +9,9 @@ jobs:
           password: $DOCKERHUB_PASSWORD
     resource_class: medium
     environment:
-      TF_gcp_credentials: $gcp_credentials
-      TF_gcp_region: $gcp_region
-      TF_gcp_zone: $gcp_zone
+      TF_VAR_gcp_credentials: $gcp_credentials
+      TF_VAR_gcp_region: $gcp_region
+      TF_VAR_gcp_zone: $gcp_zone
     steps:
       - checkout
       - run:
