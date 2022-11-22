@@ -1,0 +1,57 @@
+version: '2.1'
+
+orbs:
+  terraform: circleci/terraform@3.2
+
+jobs:
+  deploy_infrastructure:
+    executor: terraform/default
+    steps:
+      - checkout
+      - run:
+          command: |
+            echo 'aws_region = "$aws_region"' >> config.aws.backend
+            echo 'aws_access_key_id = "$aws_access_key"' >> config.aws.backend
+            echo 'aws_secret_access_key = "$aws_secret_key"' >> config.aws.backend
+            echo 'gcp_credentials = "$gcp_credentials"' >> secret.tfvars
+            echo 'gcp_region = "$gcp_region"' >> secret.tfvars
+            echo 'gcp_zone = "$gcp_zone"' >> secret.tfvars
+            terraform init -reconfigure -backend-config=config.aws.backend
+      - terraform/fmt:
+          checkout: true
+          context: 
+            - terraform
+            - n3-zeus
+      - terraform/validate:
+          checkout: true
+          parameters: 
+            - backend_config_file: config.aws.backend
+          context: 
+            - terraform
+            - n3-zeus
+          requires:
+            - terraform/fmt
+      - terraform/plan:
+          checkout: true
+          parameters: 
+            - backend_config_file: config.aws.backend
+            - var_file: secret.tfvars
+          context: 
+            - terraform
+            - n3-zeus
+          persist-workspace: true
+          requires:
+            - terraform/validate
+      - terraform/apply:
+          parameters: 
+            - backend_config_file: config.aws.backend
+            - var_file: secret.tfvars
+          attach-workspace: true
+          context: 
+            - terraform
+            - n3-zeus
+          filters:
+            branches:
+              only: main
+          requires:
+            - terraform/plan

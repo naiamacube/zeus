@@ -1,0 +1,39 @@
+data "google_service_account" "master" {
+  account_id = "n3-zeus-tf"
+}
+
+resource "google_container_cluster" "main" {
+  name     = "flow-captain"
+  location = var.gcp_zone
+
+  remove_default_node_pool = true
+  initial_node_count       = 1
+}
+
+resource "google_container_node_pool" "main" {
+  name       = "main-pool"
+  location   = var.gcp_zone
+  cluster    = google_container_cluster.main.name
+  
+  autoscaling {
+    min_node_count = 1
+    max_node_count = 3
+  }
+
+  management {
+    auto_repair  = true
+    auto_upgrade = false
+  }
+
+  node_config {
+    preemptible  = false
+    machine_type = "e2-micro"
+    disk_type    = "pd-standard"
+    disk_size_gb = 10
+
+    service_account = google_service_account.master.email
+    oauth_scopes    = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
+  }
+}
