@@ -6,9 +6,6 @@ orbs:
 jobs:
   single-job-lifecycle:
     executor: terraform/default
-    context: 
-      - terraform
-      - n3-zeus
     steps:
       - checkout
       - run:
@@ -50,4 +47,7 @@ jobs:
 workflows:
   single-job-lifecycle:
     jobs:
-      - single-job-lifecycle
+      - single-job-lifecycle:
+          context:
+            - terraform
+            - n3-zeus
