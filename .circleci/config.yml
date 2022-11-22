@@ -17,8 +17,8 @@ jobs:
       - run:
           command: |
             echo "region = \"$aws_region\"" >> config.aws.backend
-            echo "access_key_id = \"$aws_access_key\"" >> config.aws.backend
-            echo "secret_access_key = \"$aws_secret_key\"" >> config.aws.backend
+            echo "access_key = \"$aws_access_key\"" >> config.aws.backend
+            echo "secret_key = \"$aws_secret_key\"" >> config.aws.backend
       - run:
           command: |
             terraform init -reconfigure -backend-config=config.aws.backend
