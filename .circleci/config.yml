@@ -4,7 +4,7 @@ orbs:
   terraform: circleci/terraform@3.2
 
 jobs:
-  deploy_infrastructure:
+  single-job-lifecycle:
     executor: terraform/default
     steps:
       - checkout
