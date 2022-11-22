@@ -5,7 +5,9 @@ orbs:
 
 jobs:
   single-job-lifecycle:
-    executor: terraform/default
+    executor: 
+      terraform/default:
+        resource_class: large
     steps:
       - checkout
       - terraform/install:
@@ -18,7 +20,8 @@ jobs:
             echo 'gcp_credentials = "$gcp_credentials"' >> secret.tfvars
             echo 'gcp_region = "$gcp_region"' >> secret.tfvars
             echo 'gcp_zone = "$gcp_zone"' >> secret.tfvars
-            terraform init -reconfigure -backend-config=config.aws.backend
+      - terraform/init:
+          backend_config_file: config.aws.backend
       - terraform/fmt
       - terraform/validate
       - terraform/plan:
