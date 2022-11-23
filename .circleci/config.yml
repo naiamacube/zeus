@@ -32,6 +32,9 @@ jobs:
           at: .
       - run:
           command: |
+            ls
+      - run:
+          command: |
             terraform init -reconfigure -backend-config=config.aws.tfbackend
       - run:
           command: |
