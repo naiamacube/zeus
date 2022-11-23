@@ -22,12 +22,13 @@ jobs:
       - persist_to_workspace:
           root: .
           paths: 
-            - .
+            - config.aws.tfbackend
 
   deploy:
     executor: terraform
     resource_class: medium
     steps:
+      - checkout
       - attach_workspace:
           at: .
       - run:
@@ -53,6 +54,7 @@ jobs:
     executor: terraform
     resource_class: medium
     steps:
+      - checkout
       - attach_workspace:
           at: .
       - run:
