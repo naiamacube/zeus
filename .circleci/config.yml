@@ -19,6 +19,9 @@ jobs:
             echo "region = \"$aws_region\"" >> config.aws.tfbackend
             echo "access_key = \"$aws_access_key\"" >> config.aws.tfbackend
             echo "secret_key = \"$aws_secret_key\"" >> config.aws.tfbackend
+      - run:
+          command: |
+            echo "$(pwd)"
       - persist_to_workspace:
           root: .
           paths: 
