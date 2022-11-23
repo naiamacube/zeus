@@ -1,2 +1,15 @@
-# VIm stuff
+# exclude terraform kitchen
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+**/secret.tfvars
+backend.tf
+config.*.tfbackend
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# vim stuff
 **/*.swp
