@@ -2,8 +2,8 @@ version: '2.1'
 
 executors:
   terraform:
+    working_directory: /tmp
     docker:
-      - working_directory: /project
       - image: naiama/longor:0.1.0
         auth:
           username: $DOCKERHUB_USERNAME
@@ -21,7 +21,7 @@ jobs:
             echo "access_key = \"$aws_access_key\"" >> config.aws.tfbackend
             echo "secret_key = \"$aws_secret_key\"" >> config.aws.tfbackend
       - persist_to_workspace:
-          root: .
+          root: workspace
           paths: 
             - config.aws.tfbackend
 
@@ -30,7 +30,7 @@ jobs:
     resource_class: medium
     steps:
       - attach_workspace:
-          at: .
+          at: /tmp/workspace
       - checkout
       - run:
           command: |
@@ -53,7 +53,7 @@ jobs:
     resource_class: medium
     steps:
       - attach_workspace:
-          at: .
+          at: /tmp/workspace
       - checkout
       - run:
           command: |
@@ -61,12 +61,6 @@ jobs:
 
 workflows:
   deploy:
-    triggers:
-      - schedule:
-          cron: "* * * * *"
-          filters:
-            branches:
-              only: main
     jobs:
       - config:
           context:
@@ -75,12 +69,6 @@ workflows:
           context:
             - n3-zeus
   destroy:
-    triggers:
-      - schedule:
-          cron: "* * * * *"
-          filters:
-            branches:
-              only: sleep
     jobs:
       - config:
           context:
