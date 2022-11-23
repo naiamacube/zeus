@@ -1,4 +1,4 @@
-data "google_project" "main" { }
+data "google_project" "main" {}
 
 data "google_service_account" "master" {
   account_id = "zeus-tf"
@@ -14,10 +14,10 @@ resource "google_container_cluster" "main" {
 }
 
 resource "google_container_node_pool" "main" {
-  name       = "main-pool"
-  location   = var.gcp_zone
-  cluster    = google_container_cluster.main.name
-  
+  name     = "main-pool"
+  location = var.gcp_zone
+  cluster  = google_container_cluster.main.name
+
   autoscaling {
     min_node_count = 1
     max_node_count = 3
@@ -25,7 +25,7 @@ resource "google_container_node_pool" "main" {
 
   management {
     auto_repair  = true
-    auto_upgrade = false
+    auto_upgrade = true
   }
 
   node_config {
@@ -35,7 +35,7 @@ resource "google_container_node_pool" "main" {
     disk_size_gb = 10
 
     service_account = data.google_service_account.master.email
-    oauth_scopes    = [
+    oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
   }
