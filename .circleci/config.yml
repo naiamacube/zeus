@@ -59,6 +59,12 @@ jobs:
 
 workflows:
   deploy:
+    triggers:
+      - schedule:
+          cron: "0 9 * * *"
+          filters:
+            branches:
+              only: main
     jobs:
       - config:
           context:
@@ -68,11 +74,19 @@ workflows:
             - config
           context:
             - n3-zeus
-              # destroy:
-              # jobs:
-              # - config:
-              # context:
-              # - terraform
-              # - destroy:
-              # context:
-              # - n3-zeus
+  destroy:
+    triggers:
+      - schedule:
+          cron: "0 21 * * *"
+          filters:
+            branches:
+              only: main
+    jobs:
+      - config:
+          context:
+            - n3-zeus
+      - destroy:
+          requires:
+            - config
+          context:
+            - n3-zeus
