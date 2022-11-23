@@ -3,6 +3,7 @@ version: '2.1'
 executors:
   terraform:
     docker:
+      - working_directory: /project
       - image: naiama/longor:0.1.0
         auth:
           username: $DOCKERHUB_USERNAME
