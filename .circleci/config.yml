@@ -2,7 +2,8 @@ version: '2.1'
 
 executors:
   terraform:
-    - image: naiama/longor:0.1.0
+    docker:
+      image: naiama/longor:0.1.0
       auth:
         username: $DOCKERHUB_USERNAME
         password: $DOCKERHUB_PASSWORD
@@ -37,6 +38,8 @@ jobs:
   destroy:
     executor: terraform
     resource_class: medium
+    steps:
+      - checkout
 
 workflows:
   deploy:
