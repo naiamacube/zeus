@@ -21,6 +21,8 @@ jobs:
             echo "secret_key = \"$aws_secret_key\"" >> config.aws.tfbackend
       - persist_to_workspace:
           root: .
+          paths: 
+            - config.aws.tfbackend
 
   deploy:
     executor: terraform
