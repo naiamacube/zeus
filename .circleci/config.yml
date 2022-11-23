@@ -1,5 +1,13 @@
 version: '2.1'
 
+parameters:
+  deploy:
+    default: false
+    type: boolean
+  destroy:
+    default: false
+    type: boolean
+
 executors:
   terraform:
     working_directory: ~/project
@@ -59,6 +67,7 @@ jobs:
 
 workflows:
   deploy:
+    when: << pipeline.parameters.deploy >>
     triggers:
       - schedule:
           cron: "0 9 * * *"
@@ -75,6 +84,7 @@ workflows:
           context:
             - n3-zeus
   destroy:
+    when: << pipeline.parameters.destroy >>
     triggers:
       - schedule:
           cron: "0 21 * * *"
