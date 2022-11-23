@@ -7,7 +7,6 @@ executors:
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
-    working_directory: /tmp
 
 jobs:
   config:
@@ -21,7 +20,7 @@ jobs:
             echo "access_key = \"$aws_access_key\"" >> config.aws.tfbackend
             echo "secret_key = \"$aws_secret_key\"" >> config.aws.tfbackend
       - persist_to_workspace:
-          root: workspace
+          root: .
           paths: 
             - config.aws.tfbackend
 
@@ -29,12 +28,9 @@ jobs:
     executor: terraform
     resource_class: medium
     steps:
-      - checkout
       - attach_workspace:
-          at: /tmp/workspace
-      - run:
-          command: |
-            ls
+          at: .
+      - checkout
       - run:
           command: |
             terraform init -reconfigure -backend-config=config.aws.tfbackend
@@ -55,9 +51,9 @@ jobs:
     executor: terraform
     resource_class: medium
     steps:
-      - checkout
       - attach_workspace:
-          at: /tmp/workspace
+          at: .
+      - checkout
       - run:
           command: |
             terraform destroy
