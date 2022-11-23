@@ -64,6 +64,8 @@ workflows:
           context:
             - terraform
       - deploy:
+          requires: 
+            - config
           context:
             - n3-zeus
               # destroy:
