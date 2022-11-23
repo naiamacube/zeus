@@ -62,7 +62,7 @@ workflows:
     jobs:
       - config:
           context:
-            - terraform
+            - n3-zeus
       - deploy:
           requires: 
             - config
