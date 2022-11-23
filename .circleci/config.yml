@@ -1,17 +1,16 @@
 version: '2.1'
 
+executors:
+  terraform:
+    - image: naiama/longor:0.1.0
+      auth:
+        username: $DOCKERHUB_USERNAME
+        password: $DOCKERHUB_PASSWORD
+
 jobs:
   deploy:
-    docker:
-      - image: naiama/longor:0.1.0
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
+    executor: terraform
     resource_class: medium
-      # environment:
-      # TF_VAR_gcp_credentials: $gcp_credentials
-      # TF_VAR_gcp_region: $gcp_region
-      # TF_VAR_gcp_zone: $gcp_zone
     steps:
       - checkout
       - run:
@@ -35,10 +34,22 @@ jobs:
           command: |
             terraform apply -auto-approve tfplan
 
+  destroy:
+    executor: terraform
+    resource_class: medium
+
 workflows:
   deploy:
     jobs:
       - deploy:
+          branches:
+            only: main
+          context:
+            - terraform
+            - n3-zeus
+      - destroy:
+          branches:
+            only: sleep
           context:
             - terraform
             - n3-zeus
