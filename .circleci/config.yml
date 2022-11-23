@@ -9,19 +9,28 @@ executors:
           password: $DOCKERHUB_PASSWORD
 
 jobs:
-  deploy:
+  config:
     executor: terraform
     resource_class: medium
     steps:
       - checkout
       - run:
           command: |
-            echo "region = \"$aws_region\"" >> config.aws.backend
-            echo "access_key = \"$aws_access_key\"" >> config.aws.backend
-            echo "secret_key = \"$aws_secret_key\"" >> config.aws.backend
+            echo "region = \"$aws_region\"" >> config.aws.tfbackend
+            echo "access_key = \"$aws_access_key\"" >> config.aws.tfbackend
+            echo "secret_key = \"$aws_secret_key\"" >> config.aws.tfbackend
+      - presist_to_workspace:
+          root: .
+
+  deploy:
+    executor: terraform
+    resource_class: medium
+    steps:
+      - attach_workspace:
+          at: .
       - run:
           command: |
-            terraform init -reconfigure -backend-config=config.aws.backend
+            terraform init -reconfigure -backend-config=config.aws.tfbackend
       - run:
           command: |
             terraform fmt
@@ -39,22 +48,34 @@ jobs:
     executor: terraform
     resource_class: medium
     steps:
-      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            terraform destroy
 
 workflows:
   deploy:
+    triggers:
+      schedule:
+        branches:
+          only: main
     jobs:
+      - config:
+          context:
+            - terraform
       - deploy:
-          filter:
-            branches:
-              only: main
           context:
-            - terraform
             - n3-zeus
-      - destroy:
-          filter:
-            branches:
-              only: sleep
+  destroy:
+    triggers:
+      schedule:
+        branches:
+          only: sleep
+    jobs:
+      - config:
           context:
             - terraform
+      - destroy:
+          context:
             - n3-zeus
