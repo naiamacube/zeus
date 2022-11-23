@@ -58,8 +58,10 @@ workflows:
   deploy:
     triggers:
       - schedule:
-          branches:
-            only: main
+          cron: "* * * * *"
+          filters:
+            branches:
+              only: main
     jobs:
       - config:
           context:
@@ -70,8 +72,10 @@ workflows:
   destroy:
     triggers:
       - schedule:
-          branches:
-            only: sleep
+          cron: "* * * * *"
+          filters:
+            branches:
+              only: sleep
     jobs:
       - config:
           context:
