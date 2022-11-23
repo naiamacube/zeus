@@ -13,4 +13,5 @@ provider "google" {
   credentials = var.gcp_credentials
   region      = var.gcp_region
   zone        = var.gcp_zone
+  project     = "n3-zeus"
 }

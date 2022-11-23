@@ -1,5 +1,8 @@
+data "google_project" "main" { }
+
 data "google_service_account" "master" {
-  account_id = "n3-zeus-tf"
+  account_id = "zeus-tf"
+  project    = data.google_project.main.number
 }
 
 resource "google_container_cluster" "main" {
