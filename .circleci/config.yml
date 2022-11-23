@@ -45,14 +45,16 @@ workflows:
   deploy:
     jobs:
       - deploy:
-          branches:
-            only: main
+          filter:
+            branches:
+              only: main
           context:
             - terraform
             - n3-zeus
       - destroy:
-          branches:
-            only: sleep
+          filter:
+            branches:
+              only: sleep
           context:
             - terraform
             - n3-zeus
