@@ -20,17 +20,16 @@ jobs:
             echo "access_key = \"$aws_access_key\"" >> config.aws.tfbackend
             echo "secret_key = \"$aws_secret_key\"" >> config.aws.tfbackend
       - persist_to_workspace:
-          root: /home/circleci/project
+          root: .
           paths: 
-            - config.aws.tfbackend
+            - ./*
 
   deploy:
     executor: terraform
     resource_class: medium
     steps:
       - attach_workspace:
-          at: /home/circleci/project
-      - checkout
+          at: ./
       - run:
           command: |
             terraform init -reconfigure -backend-config=config.aws.tfbackend
@@ -52,8 +51,7 @@ jobs:
     resource_class: medium
     steps:
       - attach_workspace:
-          at: /home/circleci/project
-      - checkout
+          at: ./
       - run:
           command: |
             terraform destroy
