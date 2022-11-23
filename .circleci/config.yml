@@ -2,6 +2,7 @@ version: '2.1'
 
 executors:
   terraform:
+    working_directory: ~/project
     docker:
       - image: naiama/longor:0.1.0
         auth:
@@ -20,16 +21,16 @@ jobs:
             echo "access_key = \"$aws_access_key\"" >> config.aws.tfbackend
             echo "secret_key = \"$aws_secret_key\"" >> config.aws.tfbackend
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths: 
-            - ./*
+            - "project"
 
   deploy:
     executor: terraform
     resource_class: medium
     steps:
       - attach_workspace:
-          at: ./
+          at: ~/
       - run:
           command: |
             terraform init -reconfigure -backend-config=config.aws.tfbackend
@@ -51,7 +52,7 @@ jobs:
     resource_class: medium
     steps:
       - attach_workspace:
-          at: ./
+          at: ~/
       - run:
           command: |
             terraform destroy
