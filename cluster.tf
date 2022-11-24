@@ -42,7 +42,7 @@ resource "google_container_node_pool" "main" {
 }
 
 provider "kubernetes" {
-  host = "https://${data.google_container_cluster.main.endpoint}"
+  host = "https://${google_container_cluster.main.endpoint}"
 
   client_certificate = base64decode(
     google_container_cluster.main.master_auth.0.client_certificate
