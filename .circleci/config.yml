@@ -2,10 +2,10 @@ version: '2.1'
 
 parameters:
   deploy:
-    default: true
+    default: false
     type: boolean
   destroy:
-    default: false
+    default: true
     type: boolean
 
 executors:
