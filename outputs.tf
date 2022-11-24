@@ -17,3 +17,8 @@ output "flow-captain-node-pool-id" {
   value     = google_container_node_pool.main.id
   sensitive = true
 }
+
+output "argocd-release-manifest" {
+  value     = helm_release.argocd.manifest
+  sensitive = true
+}

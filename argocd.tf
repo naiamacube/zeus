@@ -9,6 +9,9 @@ provider "helm" {
       google_container_cluster.main.master_auth.0.cluster_ca_certificate
     )
   }
+  experiments {
+    manifest = true
+  }
 }
 
 resource "helm_release" "argocd" {
@@ -19,4 +22,5 @@ resource "helm_release" "argocd" {
   namespace        = "argocd"
   version          = "5.14.1"
   create_namespace = true
+  atomic           = true
 }
