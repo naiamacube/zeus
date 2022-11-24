@@ -4,18 +4,10 @@ terraform {
       source  = "hashicorp/google"
       version = "4.41.0"
     }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.16.0"
-    }
     helm = {
       source  = "hashicorp/helm"
       version = "2.7.1"
     }
-    # http = {
-    # source  = "hashicorp/http"
-    # version = "3.2.1"
-    # }
   }
 
   required_version = "> 1.2.8"
