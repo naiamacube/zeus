@@ -14,3 +14,6 @@ override.tf.json
 
 # vim stuff
 **/*.swp
+
+# helm charts...for now
+charts
