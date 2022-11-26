@@ -24,3 +24,14 @@ resource "helm_release" "argocd" {
   create_namespace = true
   atomic           = true
 }
+
+resource "helm_release" "argoworkflows" {
+  name = "argoworkflows"
+
+  repository       = "https://argoproj.github.io/argo-helm"
+  chart            = "argo-workflows"
+  namespace        = "argoworkflows"
+  version          = "3.4.3"
+  create_namespace = true
+  atomic           = true
+}
